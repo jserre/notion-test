@@ -1,3 +1,24 @@
+document.addEventListener('DOMContentLoaded', async () => {
+    await displayCommitInfo();
+});
+
+async function displayCommitInfo() {
+    const commitInfoDiv = document.getElementById('commitInfo');
+    try {
+        const response = await fetch('https://api.github.com/repos/jserre/notion-test/commits/main');
+        if (response.ok) {
+            const data = await response.json();
+            const commitSha = data.sha;
+            const commitMessage = data.commit.message;
+            commitInfoDiv.innerHTML = `Commit SHA: ${commitSha}<br>Commit Message: ${commitMessage}`;
+        } else {
+            commitInfoDiv.innerHTML = 'Failed to fetch commit info';
+        }
+    } catch (error) {
+        commitInfoDiv.innerHTML = 'Error fetching commit info';
+    }
+}
+
 async function connectToNotion() {
     console.log('connectToNotion called');
     const apiKey = document.getElementById('apiKey').value;
